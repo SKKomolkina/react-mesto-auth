@@ -7,9 +7,9 @@ function Header() {
             <img className="logo header__logo" src={headerLogo} alt="Логотип Mesto" />
 
             <p className="header__mail"></p>
-            <button className="header__button"></button>
+            <button className="header__button">Вход</button>
         </header>
     )
 }
 
-export default Header
+export default Header;
