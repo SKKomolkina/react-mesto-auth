@@ -22,4 +22,4 @@
 
 В планах доработки: смена языка приложения, добавление валидации форм.
 
-# https://skkomolkina.github.io/mesto-react/
+# https://skkomolkina.github.io/react-mesto-auth/
