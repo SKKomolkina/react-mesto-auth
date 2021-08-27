@@ -64,10 +64,8 @@ function App() {
         if (jwt) {
             auth.getContent(jwt).then((res) => {
                 if(res) {
-                isLoggedIn(true);
-
+                setIsLoggedIn(true);
                 setEmail(res.email);
-
                 history.push('/');
             }
                 })
@@ -86,8 +84,9 @@ function App() {
                         path: successImage,
                         text: 'Вы успешно зарегистрировались!',
                     })
-
-                    setIsInfoPopupOpen(true);
+                    handleInfoPopupOpen();
+                    setTimeout(history.push, 3000, "/sign-in");
+                    setTimeout(closeAllPopups, 4000)
 
                     return response.json();
                 }
@@ -97,9 +96,8 @@ function App() {
                     path: failImage,
                     text: 'Что-то пошло не так! Попробуйте ещё раз.',
                 })
-
-                setIsInfoPopupOpen(true);
-
+                handleInfoPopupOpen();
+                setTimeout(closeAllPopups, 4000);
                 console.log(err);
             })
     }
@@ -107,14 +105,19 @@ function App() {
     function authorization(email, password) {
         auth.authorize(email, password)
             .then((data) => {
-                if(data.jwt) {
+                auth.getContent(data).then((res)=> {
+                    setEmail(res.data.email)
+                }).catch(err => console.log(err))
                     setIsLoggedIn(true);
                     history.push('/');
-                }
                 }
             )
     }
 
+    function signOut() {
+        localStorage.removeItem('jwt');
+        history.push('/sign-in');
+    }
 
     // <---------- Open & Close ---------->
 
@@ -123,6 +126,10 @@ function App() {
             path: path,
             text: text,
         })
+    }
+
+    function handleInfoPopupOpen() {
+        setIsInfoPopupOpen(true);
     }
 
     function handleEditAvatarClick() {
@@ -209,8 +216,9 @@ function App() {
         <CurrentUserContext.Provider value={currentUser}>
             <div className="root">
                 <Header
-                    isLoggedIn={isLoggedIn}
                     email={email}
+
+                    signOut={signOut}
                 />
 
                 <Switch>
