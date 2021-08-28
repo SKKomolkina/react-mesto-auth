@@ -27,14 +27,16 @@ function Main({ onEditAvatar, onEditProfile, onAddPlace, onCardClick, onCardLike
             </section>
 
             <section className="photos">
-                {cards.map(card => 
+                {cards.map(card => (
                 <Card
                     card={card}
                     key={card._id}
                     onCardClick={onCardClick}
                     onCardLike={onCardLike}
                     onCardDelete={onCardDelete}  
-                    />)}
+                    />
+                    )
+                    )}
             </section>
         </main>
     )

@@ -4,7 +4,6 @@ import { Link, Switch, Route } from 'react-router-dom';
 import headerLogo from '../images/logo.svg';
 
 function Header({ email, signOut }) {
-
     return (
         <header className="header">
             <img className="logo header__logo" src={headerLogo} alt="Логотип Mesto" />

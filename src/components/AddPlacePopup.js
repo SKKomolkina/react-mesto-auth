@@ -2,15 +2,32 @@ import React from 'react';
 import PopupWithForm from './PopupWithForm';
 
 function AddPlacePopup({ isOpen, onClose, onAddPlace }) {
-    const nameRef = React.useRef();
-    const linkRef = React.useRef();
+    const [nameValue, setNameValue]= React.useState('');
+    const [linkValue, setLinkValue] = React.useState('');
+
+    React.useEffect(() => {
+        setLinkValue('')
+        setNameValue('')
+    }, [onClose])
+
+    function handleChangeNameValue(evt) {
+        evt.preventDefault();
+
+        setNameValue(evt.target.value);
+    }
+
+    function handleChangeLinkValue(evt) {
+        evt.preventDefault();
+
+        setLinkValue(evt.target.value);
+    }
 
     function handleSubmit(evt) {
         evt.preventDefault();
 
         onAddPlace({
-            name: nameRef.current.value,
-            link: linkRef.current.value,
+            name: nameValue,
+            link: linkValue,
         });
     }
 
@@ -26,9 +43,11 @@ function AddPlacePopup({ isOpen, onClose, onAddPlace }) {
         >
 
             <input
-                ref={nameRef}
+                onChange={handleChangeNameValue}
+                value={nameValue}
                 id="popup__input_type_title"
-                className="popup__input popup__input_type_title" type="text" name="name"
+                className="popup__input popup__input_type_title" 
+                type="text" name="name"
                 placeholder="Название"
                 minLength="1"
                 maxLength="30"
@@ -37,7 +56,8 @@ function AddPlacePopup({ isOpen, onClose, onAddPlace }) {
             <span id="popup__input_type_title-error" className="popup__error"></span>
 
             <input
-                ref={linkRef}
+                onChange={handleChangeLinkValue}
+                value={linkValue}
                 id="popup__input_type_image"
                 className="popup__input popup__input_type_image"
                 type="url" name="link"

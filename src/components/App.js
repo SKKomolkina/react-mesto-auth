@@ -3,6 +3,7 @@ import { Route, Switch, Redirect, useHistory } from 'react-router-dom';
 
 import Header from './Header';
 import Main from './Main';
+import Footer from './Footer';
 import ImagePopup from './ImagePopup';
 import EditAvatarPopup from './EditAvatarPopup';
 import EditProfilePopup from './EditProfilePopup';
@@ -25,7 +26,7 @@ function App() {
     const [isLoggedIn, setIsLoggedIn] = React.useState(false);
 
     const [currentUser, setCurrentUser] = React.useState({});
-    const [email, setEmail] = React.useState('');
+    const [emailValue, setEmailValue] = React.useState('');
 
     const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = React.useState(false);
     const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = React.useState(false);
@@ -63,14 +64,15 @@ function App() {
         const jwt = localStorage.getItem('jwt');
         if (jwt) {
             auth.getContent(jwt).then((res) => {
-                if(res) {
+                if (res) {
+                    setEmailValue(res.data.email);
+                }
                 setIsLoggedIn(true);
-                setEmail(res.email);
                 history.push('/');
-            }
-                })
+            })
                 .catch(err => console.log(err))
         }
+
     }, [isLoggedIn, history])
 
 
@@ -104,15 +106,13 @@ function App() {
 
     function authorization(email, password) {
         auth.authorize(email, password)
-            .then((data) => {
-                auth.getContent(data).then((res)=> {
-                    setEmail(res.data.email)
-                }).catch(err => console.log(err))
-                    setIsLoggedIn(true);
-                    history.push('/');
-                }
-            )
+        if(email !== emailValue) {
+            setEmailValue(email);
+        }
+        setIsLoggedIn(true);
+        history.push('/');
     }
+
 
     function signOut() {
         localStorage.removeItem('jwt');
@@ -216,7 +216,7 @@ function App() {
         <CurrentUserContext.Provider value={currentUser}>
             <div className="root">
                 <Header
-                    email={email}
+                    email={emailValue}
 
                     signOut={signOut}
                 />
@@ -253,6 +253,8 @@ function App() {
                         }
                     </Route>
                 </Switch>
+
+                <Footer />
 
                 <EditAvatarPopup
                     isOpen={isEditAvatarPopupOpen}
