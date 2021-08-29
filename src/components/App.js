@@ -80,33 +80,30 @@ function App() {
 
     function registration(email, password) {
         auth.register(email, password)
-            .then((response) => {
-                if (response.ok) {
-                    changeInfoPopup({
-                        path: successImage,
-                        text: 'Вы успешно зарегистрировались!',
-                    })
-                    handleInfoPopupOpen();
-                    setTimeout(history.push, 3000, "/sign-in");
-                    setTimeout(closeAllPopups, 4000)
-
-                    return response.json();
-                }
+            .then(() => {
+                changeInfoPopup({
+                    path: successImage,
+                    text: 'Вы успешно зарегистрировались!',
+                })
+                console.log('yes')
+                setTimeout(history.push, 3000, "/sign-in");
             })
-            .catch((err) => {
+            .catch(() => {
                 changeInfoPopup({
                     path: failImage,
                     text: 'Что-то пошло не так! Попробуйте ещё раз.',
                 })
+                console.log('no');
+            })
+            .finally(() => {
                 handleInfoPopupOpen();
                 setTimeout(closeAllPopups, 4000);
-                console.log(err);
             })
     }
 
     function authorization(email, password) {
         auth.authorize(email, password)
-        if(email !== emailValue) {
+        if (email !== emailValue) {
             setEmailValue(email);
         }
         setIsLoggedIn(true);
@@ -152,6 +149,18 @@ function App() {
 
         setSelectedCard({ name: '', link: '' });
     }
+
+    React.useEffect(() => {
+        const closeByEsc = (e) => {
+            if (e.key === 'Escape') {
+                closeAllPopups();
+            }
+        }
+        document.addEventListener('keydown', closeByEsc);
+
+        return () => document.removeEventListener('keydown', closeByEsc)
+    }, [])
+
 
 
     // <---------- Update User & Avatar ---------->

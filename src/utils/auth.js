@@ -9,7 +9,8 @@ export const register = (email, password) => {
         },
         body: JSON.stringify({email, password})
     })
-    // .then(response => checkResult(response))
+    .then(response => checkResult(response))
+    // .then(data => data)
 }
 
 
@@ -44,6 +45,7 @@ export const getContent = (token) => {
     .then((response => checkResult(response)))
     .then(data => data)
 }
+
 
 function checkResult(res) {
     if (res.ok) {
